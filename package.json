@@ -1,0 +1,26 @@
+{
+  "name": "cashier_api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "email": "aldiwira.aw@gmail.com",
+    "name": "aldi wirawan"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "monk": "^7.3.1",
+    "yup": "^0.29.2"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  }
+}
