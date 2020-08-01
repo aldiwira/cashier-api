@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const { doFormat, dateNow } = require("../Helper/response");
 const { getCollection } = require("../Helper/db");
-const { registerModel } = require("../Helper/validator");
+const { registerModel, loginModel } = require("../Helper/validator");
 const { doSignToken } = require("../Helper/jwt");
+const { decrypt, encrypt } = require("../Helper/encrypt");
 
 let usersModels = getCollection("users");
 
@@ -22,25 +23,60 @@ router.post("/register", async (req, res, next) => {
     } else {
       const body = {
         username,
-        password,
+        password: await encrypt(password),
         store_name,
         owner_name,
         lastLogin: dateNow(),
-        lastLogout: dateNow(),
         createdAt: dateNow(),
         updatedAt: dateNow(),
       };
       const userReg = await usersModels.insert(body);
       const userToken = await doSignToken(userReg._id);
-      res
-        .status(201)
-        .json(
-          doFormat(200, "Success register account", {
-            user: userReg,
-            token: userToken,
-          })
-        );
+      res.status(201).json(
+        doFormat(201, "Success register account", {
+          user: userReg,
+          token: userToken,
+        })
+      );
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/login", async (req, res, next) => {
+  const { username, password } = req.body;
+  try {
+    await loginModel().validate(req.body);
+    await usersModels
+      .findOneAndUpdate(
+        {
+          username: username,
+        },
+        {
+          $set: {
+            lastLogin: dateNow(),
+            updatedAt: dateNow(),
+          },
+        }
+      )
+      .then(async (result) => {
+        if (result) {
+          if (await decrypt(password, result.password)) {
+            const userToken = await doSignToken(result._id);
+            res.status(200).json(
+              doFormat(200, "Success login account", {
+                user: result,
+                token: userToken,
+              })
+            );
+          } else {
+            throw new Error("Wrong password account");
+          }
+        } else {
+          throw new Error("Account not found");
+        }
+      });
   } catch (error) {
     next(error);
   }
