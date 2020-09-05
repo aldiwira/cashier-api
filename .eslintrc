@@ -10,6 +10,7 @@
   "extends": "eslint:recommended",
   "rules": {
     "semi": ["warn", "always"],
-    "quotes": ["warn", "double"]
+    "quotes": ["warn", "double"],
+    "no-unused-vars": "warn"
   }
 }
