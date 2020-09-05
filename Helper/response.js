@@ -5,7 +5,7 @@ module.exports = {
     return {
       code: code,
       message: message,
-      data: data,
+      datas: data,
     };
   },
   dateNow: () => {
