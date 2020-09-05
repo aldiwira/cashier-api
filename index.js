@@ -7,7 +7,7 @@ require("dotenv").config();
 const App = Express();
 const { db } = require("./Helper/db");
 const { doFormat } = require("./Helper/response");
-const { UsersRoute } = require("./Routes");
+const { UsersRoute, ProductsRoute } = require("./Routes");
 let port = process.env.PORT || 2000;
 
 App.use(helmet());
@@ -22,6 +22,7 @@ App.get("/", (req, res) => {
 
 //route
 App.use("/", UsersRoute);
+App.use("/products", ProductsRoute);
 
 //error handling middleware
 // eslint-disable-next-line no-unused-vars
