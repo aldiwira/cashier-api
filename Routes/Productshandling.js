@@ -42,19 +42,17 @@ router.get("/:idProduct", doAuthToken, async (req, res, next) => {
 });
 
 router.post("/", doAuthToken, async (req, res, next) => {
-  const { productName, price, stock, description } = req.body;
+  const { productName, price, description } = req.body;
   const { _id } = req.payload;
   const bodyA = {
     productName,
     description,
     price,
-    stock,
     owner: _id,
     createdAt: dateNow(),
     updatedAt: dateNow(),
   };
   try {
-    console.log(bodyA);
     const check = await checkDatas({ productName, owner: _id });
     if (check) {
       throw new Error("Products was available in your catalog");
@@ -76,14 +74,13 @@ router.post("/", doAuthToken, async (req, res, next) => {
 });
 
 router.put("/:idProduct/edit", doAuthToken, async (req, res, next) => {
-  const { productName, price, stock, description } = req.body;
+  const { productName, price, description } = req.body;
   const { idProduct } = req.params;
   const { _id } = req.payload;
   const bodyA = {
     productName,
     description,
     price,
-    stock,
     updatedAt: dateNow,
   };
   try {
@@ -115,11 +112,7 @@ router.delete("/:idProduct/delete", doAuthToken, async (req, res, next) => {
     await productsModels
       .findOneAndDelete({ _id: idProduct, owner: _id })
       .then((datas) => {
-        res
-          .status(200)
-          .json(
-            doFormat(200, `Success delete ${datas.productName} product`, true)
-          );
+        res.status(200).json(doFormat(200, `Success delete product`, true));
       });
   } catch (error) {
     next(error);
