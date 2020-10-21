@@ -1,10 +1,8 @@
 const router = require("express").Router();
 const { doAuthToken } = require("../Helper/jwt");
-const { getCollection } = require("../Helper/db");
+const { getCollection } = require("../Db");
 const { dateNow, doFormat } = require("../Helper/response");
 const moment = require("moment");
-
-const productsColection = getCollection("products");
 
 const ordersColection = getCollection("orders");
 

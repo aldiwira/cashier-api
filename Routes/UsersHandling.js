@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { doFormat, dateNow } = require("../Helper/response");
-const { getCollection } = require("../Helper/db");
+const { getCollection } = require("../Db");
 const { registerModel, loginModel } = require("../Helper/validator");
 const { doSignToken } = require("../Helper/jwt");
 const { decrypt, encrypt } = require("../Helper/encrypt");

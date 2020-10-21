@@ -5,7 +5,7 @@ const morgan = require("morgan");
 require("dotenv").config();
 
 const App = Express();
-const { db } = require("./Helper/db");
+const { db } = require("./Db");
 const { doFormat } = require("./Helper/response");
 const { UsersRoute, ProductsRoute, OrdersRoute } = require("./Routes");
 let port = process.env.PORT || 2000;

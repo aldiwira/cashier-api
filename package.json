@@ -24,7 +24,7 @@
     "yup": "^0.29.2"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "export NODE_ENV=production && node index.js",
+    "dev": "export NODE_ENV=development && nodemon index.js"
   }
 }
