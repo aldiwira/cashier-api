@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 module.exports = {
   encrypt: async (password) => {
@@ -6,5 +6,5 @@ module.exports = {
   },
   decrypt: async (password, encrypted) => {
     return await bcrypt.compare(password, encrypted);
-  },
+  }
 };

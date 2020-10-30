@@ -1,4 +1,4 @@
-const yup = require("yup");
+const yup = require('yup');
 
 module.exports = {
   registerModel: () => {
@@ -8,7 +8,7 @@ module.exports = {
         .min(5)
         .matches(
           /^[a-zA-Z0-9]*$/gm,
-          "Username must be format alphanumeric without space"
+          'Username must be format alphanumeric without space'
         )
         .required(),
       password: yup
@@ -17,10 +17,9 @@ module.exports = {
         .required()
         .matches(
           /^[a-zA-Z0-9]*$/gm,
-          "Password must be format alphanumeric without space"
+          'Password must be format alphanumeric without space'
         ),
-      store_name: yup.string().required(),
-      owner_name: yup.string().required(),
+      store_name: yup.string().required()
     });
   },
   loginModel: () => {
@@ -32,8 +31,8 @@ module.exports = {
         .required()
         .matches(
           /^[a-zA-Z0-9]*$/gm,
-          "Password must be format alphanumeric without space"
-        ),
+          'Password must be format alphanumeric without space'
+        )
     });
-  },
+  }
 };
