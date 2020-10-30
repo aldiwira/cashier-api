@@ -34,5 +34,12 @@ module.exports = {
           'Password must be format alphanumeric without space'
         )
     });
+  },
+  productModel: () => {
+    return yup.object().shape({
+      productName: yup.string().required(),
+      price: yup.number().required(),
+      description: yup.string().required()
+    });
   }
 };

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { doAuthToken } = require('../Helper/jwt');
 const { getCollection } = require('../Db');
 const { doFormat, dateNow } = require('../Helper/response');
+const validator = require('../Helper/validator');
 
 const productsModels = getCollection('products');
 
@@ -53,6 +54,7 @@ router.post('/', doAuthToken, async (req, res, next) => {
     updatedAt: dateNow()
   };
   try {
+    await validator.productModel().validate(req.body);
     const check = await checkDatas({ productName, owner: _id });
     if (check) {
       throw new Error('Products was available in your catalog');
