@@ -79,10 +79,10 @@ router.post('/', doAuthToken, async (req, res, next) => {
     next(error);
   }
 });
+// List status
 // 0 = Awaiting
 // 1 = processed
 // 2 = finished
-
 router.post('/:orderID/:orderStatus', doAuthToken, async (req, res, next) => {
   let { orderID, orderStatus } = req.params;
   let processNumber = ['Awaiting', 'Processed', 'Finished'];
@@ -114,36 +114,6 @@ router.post('/:orderID/:orderStatus', doAuthToken, async (req, res, next) => {
     await ordersColection.findOneAndUpdate(filter, update).then((data) => {
       res.status(200).json(doFormat(200, `Success change order`, data));
     });
-  } catch (error) {
-    next(error);
-  }
-});
-
-//change order status
-// Order Status Route : Awaiting, processed, ready and delivered
-router.put('/statusChange/:orderId', doAuthToken, async (req, res, next) => {
-  let { orderId } = req.params;
-  let { orderStatus } = req.body;
-  try {
-    const update = {
-      orderStatus,
-      updatedAt: dateNow()
-    };
-    const filter = {
-      _id: orderId
-    };
-    await ordersColection
-      .findOneAndUpdate(filter, update)
-      .then((datas) => {
-        res
-          .status(200)
-          .json(
-            doFormat(200, `Success change order status ${orderStatus}`, datas)
-          );
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
   } catch (error) {
     next(error);
   }
