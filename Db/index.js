@@ -8,4 +8,10 @@ const getCollection = (collection) => {
   return db.get(collection);
 };
 
-module.exports = { db, getCollection };
+const listCollection = {
+  users: 'users',
+  products: 'products',
+  orders: 'orders'
+};
+
+module.exports = { db, getCollection, listCollection };
