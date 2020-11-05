@@ -61,7 +61,7 @@ router.post('/', doAuthToken, async (req, res, next) => {
       pay,
       total,
       statusOrder,
-      status: 'process',
+      statusSummary: 'process',
       cashierID: _id,
       orderDate: moment().format('MM-YYYY'),
       createdAt: dateNow(),
@@ -108,7 +108,8 @@ router.post('/:orderID/:orderStatus', doAuthToken, async (req, res, next) => {
     });
     const update = {
       $set: {
-        statusOrder: arrOrders
+        statusOrder: arrOrders,
+        statusSummary: processNumber[orderStatus]
       }
     };
     await ordersColection.findOneAndUpdate(filter, update).then((data) => {
