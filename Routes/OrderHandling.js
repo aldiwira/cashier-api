@@ -7,6 +7,8 @@ const moment = require('moment');
 const ordersColection = getCollection('orders');
 const productsCollection = getCollection(listCollection.products);
 
+let processNumber = ['Awaiting', 'Processed', 'Finished'];
+
 // Order Status Route : Awaiting, processed, ready, delivered
 
 router.get('/', doAuthToken, async (req, res, next) => {
@@ -50,7 +52,7 @@ router.post('/', doAuthToken, async (req, res, next) => {
   const { products, pay, total } = req.body;
   const statusOrder = [
     {
-      status: 'Awaiting',
+      status: processNumber[0],
       time: dateNow()
     }
   ];
@@ -60,8 +62,8 @@ router.post('/', doAuthToken, async (req, res, next) => {
       products,
       pay,
       total,
-      statusOrder,
-      statusSummary: 'process',
+      statusHistory: statusOrder,
+      statusSummary: processNumber[0],
       cashierID: _id,
       orderDate: moment().format('MM-YYYY'),
       createdAt: dateNow(),
@@ -85,7 +87,6 @@ router.post('/', doAuthToken, async (req, res, next) => {
 // 2 = finished
 router.post('/:orderID/:orderStatus', doAuthToken, async (req, res, next) => {
   let { orderID, orderStatus } = req.params;
-  let processNumber = ['Awaiting', 'Processed', 'Finished'];
   try {
     if (orderStatus > 2) {
       throw new Error('Not known orders id');
@@ -94,7 +95,7 @@ router.post('/:orderID/:orderStatus', doAuthToken, async (req, res, next) => {
       _id: orderID
     };
     const ordersData = await ordersColection.findOne(filter);
-    const arrOrders = Array.from(ordersData.statusOrder);
+    const arrOrders = Array.from(ordersData.statusHistory);
     arrOrders.map((ss) => {
       if (ss.status === processNumber[orderStatus]) {
         throw new Error(
@@ -108,12 +109,37 @@ router.post('/:orderID/:orderStatus', doAuthToken, async (req, res, next) => {
     });
     const update = {
       $set: {
-        statusOrder: arrOrders,
+        statusHistory: arrOrders,
         statusSummary: processNumber[orderStatus]
       }
     };
     await ordersColection.findOneAndUpdate(filter, update).then((data) => {
       res.status(200).json(doFormat(200, `Success change order`, data));
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+// Get orders by process number
+router.get('/status/:orderStatus', doAuthToken, async (req, res, next) => {
+  let { orderStatus } = req.params;
+  try {
+    if (orderStatus > 2 || orderStatus === null) {
+      throw new Error('Not known orders id');
+    }
+    const filter = {
+      statusSummary: processNumber[orderStatus]
+    };
+    await ordersColection.find(filter).then((data) => {
+      res
+        .status(200)
+        .json(
+          doFormat(
+            200,
+            `Success fetch all ${processNumber[orderStatus]} orders`,
+            data
+          )
+        );
     });
   } catch (error) {
     next(error);
