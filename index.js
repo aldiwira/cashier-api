@@ -7,15 +7,22 @@ require('dotenv').config();
 const App = Express();
 const { db } = require('./Db');
 const { doFormat } = require('./Helper/response');
-const { UsersRoute, ProductsRoute, OrdersRoute } = require('./Routes');
+const {
+  UsersRoute,
+  ProductsRoute,
+  OrdersRoute,
+  RecipesRoute
+} = require('./Routes');
 let port = process.env.PORT || 2000;
+const nodenv = process.env.NODE_ENV === 'development';
+console.log(nodenv ? 'Development' : 'Production');
 
 App.use(helmet());
 App.use(cors());
-App.use(morgan('dev'));
+App.use(nodenv ? morgan('dev') : morgan('tiny'));
 App.use(Express.json());
 
-//testing route
+//testing route and testing server
 App.get('/', (req, res) => {
   res.json(doFormat(200, 'Connected to cashierAPI', true));
 });
@@ -24,6 +31,7 @@ App.get('/', (req, res) => {
 App.use('/', UsersRoute);
 App.use('/products', ProductsRoute);
 App.use('/orders', OrdersRoute);
+App.use('/recipe', RecipesRoute);
 
 //error handling middleware
 // eslint-disable-next-line no-unused-vars
