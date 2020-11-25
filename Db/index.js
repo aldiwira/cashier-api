@@ -11,7 +11,8 @@ const getCollection = (collection) => {
 const listCollection = {
   users: 'users',
   products: 'products',
-  orders: 'orders'
+  orders: 'orders',
+  recipes: 'recipes'
 };
 
 module.exports = { db, getCollection, listCollection };
