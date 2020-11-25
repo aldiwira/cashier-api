@@ -50,3 +50,5 @@ router.post('/create/:orderId', doSignToken, async (req, res, next) => {
     next(error);
   }
 });
+
+module.exports = router;

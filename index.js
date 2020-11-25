@@ -15,7 +15,6 @@ const {
 } = require('./Routes');
 let port = process.env.PORT || 2000;
 const nodenv = process.env.NODE_ENV === 'development';
-console.log(nodenv ? 'Development' : 'Production');
 
 App.use(helmet());
 App.use(cors());
